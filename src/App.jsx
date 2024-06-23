@@ -1,17 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Outlet } from 'react-router-dom'
+import { useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
+import "./App.css";
+import Header from "./components/custom/Header";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { user, isLoaded } = useUser();
 
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+  if (!user) {
+    return <Navigate to="/auth/sign-in" />;
+  }
   return (
     <>
-    <Outlet/>
+      <Header />
+      <Outlet />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
